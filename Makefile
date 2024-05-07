@@ -7,4 +7,4 @@ start-backend:
 develop:
 	make start-backend & make start-frontend
 lint-frontend:
-	make -C frontend lint
+	make -C frontend lintls
