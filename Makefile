@@ -6,5 +6,5 @@ start-backend:
 	npx start-server
 develop:
 	make start-backend & make start-frontend
-lint-frontend:
-	make -C frontend lintls
+lint:
+	eslint frontend
