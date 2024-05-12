@@ -3,6 +3,12 @@ import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import hexletImage from '../images/hexlet-image.jpg';
+import axios from 'axios';
+import routes from '../routes/routes.js';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { selectUser, selectIsAuthenticated } from '../slices/authSlice.js';
+
 
 const ValidationSchema = Yup.object().shape({
   username: Yup.string()
@@ -10,17 +16,44 @@ const ValidationSchema = Yup.object().shape({
   password: Yup.string()
     .required('Обязательное поле'),
 });
+console.log('localStorage',localStorage)
+const handleSubmit = async (values, setShowError, navigate) => {
+  console.log('send request')
+  try {
+    // Отправка данных формы на сервер
+    const response = await axios.post(routes.loginPath(), {
+      username: values.username,
+      password: values.password
+    });
+    // Получение токена из ответа сервера
+    const { token } = response.data;
+    console.log('token', token)
+    // Сохранение токена в локальном хранилище
+    localStorage.setItem('token', token);
+    console.log('localStorage',localStorage)
+    console.log('token',token)
+    const getTokenInLocalStorage = localStorage.getItem('token');
+    // Перенаправление на другую страницу
+    if (!getTokenInLocalStorage) {
+      navigate('/login');
+    }
+  } catch {
+    setShowError(true);
+  }
+};
+
 
 const LoginPage = () => {
+  const [showError, setShowError] = useState(false);
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
     validationSchema:ValidationSchema,
-    onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit: (values) => handleSubmit(values, setShowError, navigate),
   });
   return (
     <div className="d-flex flex-column h-100">
@@ -39,7 +72,7 @@ const LoginPage = () => {
                   <img src= {hexletImage} className="rounded-circle" alt="Войти"></img>
                 </div>
                 <div className="col-12 col-md-6"> {/* Добавлен div для формы */}
-                  <Form onSubmit={formik.handleSubmit} >
+                <Form onSubmit={() => handleSubmit(formik.values, setShowError, navigate)}>
                     <h1 className="text-center mb-4">Войти</h1>
                     <Form.Group className="mb-3">
                     <Form.Label>Ваш Ник</Form.Label>
@@ -59,6 +92,9 @@ const LoginPage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.password} />
+                        {showError && (
+                      <div className="invalid-feedback" style={{ display: 'block', color: 'red' }}>The username or password is incorrect</div>
+                      )}
                     </Form.Group>
   
                     <Button type="submit">

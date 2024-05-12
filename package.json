@@ -16,6 +16,7 @@
     "@hexlet/chat-server": "^2.0.3"
   },
   "devDependencies": {
-    "eslint-plugin-functional": "^6.5.1"
+    "eslint-plugin-functional": "^6.5.1",
+    "nodemon": "^3.1.0"
   }
 }
