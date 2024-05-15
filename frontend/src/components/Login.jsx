@@ -16,7 +16,9 @@ const ValidationSchema = Yup.object().shape({
   password: Yup.string()
     .required('Обязательное поле'),
 });
-console.log('localStorage',localStorage)
+// console.log('localStorage',localStorage);
+
+
 const handleSubmit = async (values, setShowError, navigate) => {
   console.log('send request')
   try {
@@ -32,13 +34,22 @@ const handleSubmit = async (values, setShowError, navigate) => {
     localStorage.setItem('token', token);
     console.log('localStorage',localStorage)
     console.log('token',token)
-    const getTokenInLocalStorage = localStorage.getItem('token');
+    //const getTokenInLocalStorage = localStorage.getItem('token');
     // Перенаправление на другую страницу
-    if (!getTokenInLocalStorage) {
+    const getTokenInLocalStorage = localStorage.getItem('token'); // Перемещение сюда
+    if (getTokenInLocalStorage && getTokenInLocalStorage.length > 0) { // Добавление проверки на существование и длину
+      console.log('Есть токен!')
+      setShowError(false)
+      navigate('/');
+    }
+    else {
+      console.log('НЕТ токен!')
+      setShowError(true)
       navigate('/login');
     }
-  } catch {
-    setShowError(true);
+  } catch (e) { // Добавление catch с обработкой ошибки
+    console.log(e); // Вывод ошибки в консоль
+    setShowError(true); // Показ ошибки
   }
 };
 
@@ -72,12 +83,13 @@ const LoginPage = () => {
                   <img src= {hexletImage} className="rounded-circle" alt="Войти"></img>
                 </div>
                 <div className="col-12 col-md-6"> {/* Добавлен div для формы */}
-                <Form onSubmit={() => handleSubmit(formik.values, setShowError, navigate)}>
+                <Form onSubmit={formik.handleSubmit}>
                     <h1 className="text-center mb-4">Войти</h1>
                     <Form.Group className="mb-3">
                     <Form.Label>Ваш Ник</Form.Label>
                       <Form.Control type="text"
                         placeholder="Ваш ник"
+                        autoComplete="username"
                         id="username"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -89,17 +101,26 @@ const LoginPage = () => {
                       <Form.Control type="password" /* Изменено на password */
                         placeholder='Пароль'
                         id="password"
+                        autoComplete="password"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.password} />
                         {showError && (
-                      <div className="invalid-feedback" style={{ display: 'block', color: 'red' }}>The username or password is incorrect</div>
+                      <div className="invalid-feedback" style={{ display: 'block', color: 'red' }}>Неверные имя пользователя или пароль</div>
                       )}
                     </Form.Group>
   
                     <Button type="submit">
                       Войти
                     </Button>
+                    
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <Button type="submit" onClick={()=>localStorage.clear()}>
+                      clean Storage
+                    </Button>
+                  
                   </Form>
                   </div>
                 </div>
