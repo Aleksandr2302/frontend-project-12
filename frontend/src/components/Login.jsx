@@ -7,7 +7,9 @@ import axios from 'axios';
 import routes from '../routes/routes.js';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
-import { selectUser, selectIsAuthenticated } from '../slices/authSlice.js';
+import { selectUser, selectIsAuthenticated,setToken, getToken,setUser } from '../slices/authSlice.js';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 const ValidationSchema = Yup.object().shape({
@@ -19,7 +21,7 @@ const ValidationSchema = Yup.object().shape({
 // console.log('localStorage',localStorage);
 
 
-const handleSubmit = async (values, setShowError, navigate) => {
+const handleSubmit = async (values, setShowError, navigate, dispatch) => {
   console.log('send request')
   try {
     // Отправка данных формы на сервер
@@ -29,6 +31,8 @@ const handleSubmit = async (values, setShowError, navigate) => {
     });
     // Получение токена из ответа сервера
     const { token } = response.data;
+    dispatch(setToken(token));
+    dispatch(setUser(username.value))
     console.log('token', token)
     // Сохранение токена в локальном хранилище
     localStorage.setItem('token', token);
@@ -57,6 +61,10 @@ const handleSubmit = async (values, setShowError, navigate) => {
 const LoginPage = () => {
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const token = useSelector(getToken);
+  console.log('tokenRedux', token)
 
   const formik = useFormik({
     initialValues: {
@@ -64,7 +72,7 @@ const LoginPage = () => {
       password: '',
     },
     validationSchema:ValidationSchema,
-    onSubmit: (values) => handleSubmit(values, setShowError, navigate),
+    onSubmit: (values) => handleSubmit(values, setShowError, navigate, dispatch),
   });
   return (
     <div className="d-flex flex-column h-100">

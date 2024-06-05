@@ -7,4 +7,4 @@ start-backend:
 develop:
 	make start-backend & make start-frontend
 lint:
-	eslint frontend
+	eslint frontend --ignore-path frontend/.eslintignore
