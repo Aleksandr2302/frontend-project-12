@@ -25,11 +25,14 @@ const channelSlice = createSlice({
 export const { setChannels, setActiveChannel } = channelSlice.actions;
 export const selectChannels = (state) => state.channels.channels;
 export const getActiveChannel = (state) => state.channels.activeChannel.id;
-export const getActiveChannelName = (state) => {
-  const activeChannelId = state.channels.activeChannel.id;
-  const activeChannel = state.channels.channels.find((channel) => channel.id === activeChannelId);
 
-  // console.log('activeChannelName in Redux', activeChannel);
+export const getActiveChannelName = (state) => {
+  const activeChannelId = parseInt(state.channels.activeChannel.id, 10);
+  const activeChannel = state.channels.channels.find((
+    (channel) => parseInt(channel.id, 10) === activeChannelId));
+  console.log('activeChannelId in Redux', activeChannelId);
+
+  console.log('activeChannelName in Redux', activeChannel);
 
   return activeChannel ? activeChannel.name : null;
 };
@@ -39,5 +42,7 @@ export const getActiveChannelId = (state) => {
   const activeChannel = state.channels.channels.find((channel) => channel.id === activeChannelId);
   return activeChannel ? activeChannel.id : null;
 };
+console.log('getActiveChannelId in Redux', getActiveChannelId);
+console.log('Тип данных getActiveChannelId:', typeof getActiveChannelId);
 
 export default channelSlice.reducer;

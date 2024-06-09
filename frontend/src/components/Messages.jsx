@@ -26,14 +26,13 @@ const handleSubmit = async (newMessage, getTokenFromState) => {
   }
 };
 
-function Messages() {
+const Messages = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [networkStatus, setNetworkStatus] = useState('');
   const [pendingMessages, setPendingMessages] = useState(() => {
     const savedMessages = localStorage.getItem('pendingMessages');
     return savedMessages ? JSON.parse(savedMessages) : [];
   });
-
   const states = useSelector((state) => state);
   console.log('state', states);
   const dispatch = useDispatch();
@@ -48,6 +47,7 @@ function Messages() {
   console.log('networkStatus', networkStatus);
 
   console.log('getUserFromState', getUserFromState);
+  console.log('getActiveChannelFromState', getActiveChannelFromState);
 
   // Затем используем их внутри селектора
   const getMessageCountFromState2 = useSelector((state) => (
@@ -72,11 +72,10 @@ function Messages() {
       setIsOnline(true);
       setNetworkStatus('');
 
-      // Попробуем отправить все ожидающие сообщения
+      // Отправляем все ожидающие сообщения
       const messages = JSON.parse(localStorage.getItem('pendingMessages')) || [];
       messages.forEach((message) => handleSubmit(message, getTokenFromState));
       localStorage.removeItem('pendingMessages');
-      setPendingMessages([]);
     };
 
     const handleOffline = () => {
@@ -182,6 +181,6 @@ function Messages() {
       </div>
     </div>
   );
-}
+};
 
 export default Messages;

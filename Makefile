@@ -7,4 +7,4 @@ start-backend:
 develop:
 	make start-backend & make start-frontend
 lint:
-	eslint frontend --ignore-path frontend/.eslintignore
+	find frontend \( -name '*.js' -o -name '*.jsx' \) -not -path 'frontend/build/*' -not -path 'frontend/node_modules/*' | xargs eslint --ignore-path frontend/.eslintignore
