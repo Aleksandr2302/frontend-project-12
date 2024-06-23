@@ -37,4 +37,19 @@
   }
 }
 
+.chat-messages {
+  max-height: 500px; /* Пример максимальной высоты, при которой начнется прокрутка */
+  overflow-y: auto;
+}
 
+
+#channels-box {
+  overflow-y: auto; /* Добавляем вертикальную прокрутку */
+  overflow-x: hidden; /* Убираем горизонтальную прокрутку */
+  max-height: 550px;
+  width: 100%; /* Устанавливаем ширину в 100% */
+}
+
+.nav-item {
+  flex: 0 0 auto;
+}
