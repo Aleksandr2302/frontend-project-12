@@ -36,6 +36,20 @@ const Messages = () => {
 
   const newMessageFunc = (value, channelId, username) => ({ body: value, channelId, username });
 
+  const handleSubmit = async (newMessage, token) => {
+    console.log('Send', newMessage);
+    try {
+      const response = await axios.post('/api/v1/messages', newMessage, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     socket.on('newMessage', (message) => {
       console.log('Received new message:', message);
@@ -81,20 +95,6 @@ const Messages = () => {
     localStorage.setItem('pendingMessages', JSON.stringify(pendingMessages));
   }, [pendingMessages]);
 
-  const handleSubmit = async (newMessage, token) => {
-    console.log('Send', newMessage);
-    try {
-      const response = await axios.post('/api/v1/messages', newMessage, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const handleSubmitWithFallback = (newMessage, token) => {
     if (isOnline) {
       handleSubmit(newMessage, token);
@@ -119,20 +119,24 @@ const Messages = () => {
           </b>
         </p>
         <span className="text-muted">
-          {getMessageCountFromState2} сообщений
+          {getMessageCountFromState2}
+          {' '}
+          сообщений
         </span>
       </div>
       <div id="messages-box" ref={messagesBoxRef} className="chat-messages overflow-auto px-5 my-1">
-        {getMessageFromState &&
-          getMessageFromState
+        {getMessageFromState
+          && getMessageFromState
             .filter((message) => message.channelId === getActiveChannelIdFromState)
             .map((message) => (
               <p key={message.id} className="text-start">
-                <b>{message.username}</b>: {message.body}
+                <b>{message.username}</b>
+                :
+                {message.body}
               </p>
             ))}
       </div>
-      
+
       <div className="mt-auto px-5 py-3">
         <Formik
           initialValues={{ message: '' }}
@@ -140,7 +144,7 @@ const Messages = () => {
             const newMessage = newMessageFunc(
               values.message,
               getActiveChannelIdFromState,
-              getUserFromState
+              getUserFromState,
             );
             handleSubmitWithFallback(newMessage, getTokenFromState);
             resetForm();
@@ -170,7 +174,7 @@ const Messages = () => {
           )}
         </Formik>
       </div>
-      </div>
+    </div>
   );
 };
 

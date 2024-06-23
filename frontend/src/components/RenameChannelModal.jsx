@@ -10,10 +10,10 @@ import {
   getToken,
 } from '../slices/authSlice';
 import {
-   renameChannel, setRenameShowWindow, getActiveChannelNameIdForChanging,
+  renameChannel, setRenameShowWindow, getActiveChannelNameIdForChanging,
 } from '../slices/channelSlice';
 
-export const RenameChannelModal = (channelName, id) => {
+const RenameChannelModal = () => {
   const dispatch = useDispatch();
 
   const token = useSelector(getToken);
@@ -44,21 +44,20 @@ export const RenameChannelModal = (channelName, id) => {
     dispatch(setRenameShowWindow());
   };
 
-  const renameChannelFunction = async (newName, token, id) => {
-    console.log('newName, token, id', newName, token, id);
+  const renameChannelFunction = async (newName, userToken, id) => {
+    console.log('newName, token, id', newName, userToken, id);
     const editedChannel = { name: newName };
 
     try {
       const response = await axios.patch(`/api/v1/channels/${id}`, editedChannel, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
       });
 
       if (response.data) {
         console.log('response.data', response.data);
-        dispatch(renameChannel({ id: response.data.id, newName: response.data.name })); // Вызов диспетчера для добавления канала в Redux
-
+        dispatch(renameChannel({ id: response.data.id, newName: response.data.name }));
         handleCloseWindow(); // Закрытие модального окна после успешного добавления
       }
 
@@ -86,11 +85,14 @@ export const RenameChannelModal = (channelName, id) => {
         <Formik
           initialValues={{ renameChannelName: getActiveChannelNameIdForChangingFromState.name }}
           validationSchema={ValidationSchema}
-          onSubmit={(values, { resetForm }) => {
+          onSubmit={(values) => {
             console.log('values', values);
             console.log('values.renameChannelName, token, getActiveChannelNameIdForChangingFromState.id', values.renameChannelName, token, getActiveChannelNameIdForChangingFromState.id);
-            renameChannelFunction(values.renameChannelName, token, getActiveChannelNameIdForChangingFromState.id);
-          // resetForm();
+            renameChannelFunction(
+              values.renameChannelName,
+              token,
+              getActiveChannelNameIdForChangingFromState.id,
+            );
           }}
         >
           {({ handleChange, handleBlur, values }) => (
@@ -121,3 +123,4 @@ export const RenameChannelModal = (channelName, id) => {
     </Modal>
   );
 };
+export default RenameChannelModal;

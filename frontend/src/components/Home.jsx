@@ -7,31 +7,33 @@ import axios from 'axios';
 import cn from 'classnames';
 import routes from '../routes/routes';
 import {
-  selectChannels, setChannels, setActiveChannel, getActiveChannel, getActiveChannelName,getShowModalWindow,getRenameShowModalWindow,getActiveChannelNameIdForChanging,getDeleteShowModalWindow
+  selectChannels,
+  setChannels,
+  getActiveChannel,
+  getActiveChannelName,
+  getShowModalWindow,
+  getRenameShowModalWindow,
+  getActiveChannelNameIdForChanging,
+  getDeleteShowModalWindow,
 } from '../slices/channelSlice';
-import {
-  selectUser, selectIsAuthenticated, setToken, getToken,
-} from '../slices/authSlice';
-import { addMessage, getMessageCount } from '../slices/messageSlice';
+
+import { getToken } from '../slices/authSlice';
+
 import Channels from './Channels';
 import Messages from './Messages';
-import { ChannelModalWindow } from './ChannelModal';
-import { RenameChannelModal } from './RenameChannelModal';
-import {DeleteChannelModal} from './DeleteChannel';
-
+import ChannelModalWindow from './ChannelModal';
+import RenameChannelModal from './RenameChannelModal';
+import DeleteChannelModal from './DeleteChannel';
 
 const HomePage = () => {
-
-  
-
   const token = useSelector(getToken);
   console.log('token in home page', token);
 
-  const {nameForRename, idForRename} = useSelector(getActiveChannelNameIdForChanging);
-  const {name, id} = useSelector(getActiveChannelNameIdForChanging);
-  console.log('name in home',name , 'id in home',id)
+  const { nameForRename, idForRename } = useSelector(getActiveChannelNameIdForChanging);
+  const { name, id } = useSelector(getActiveChannelNameIdForChanging);
+  console.log('name in home', name, 'id in home', id);
 
-  console.log('idForRename in Home',idForRename)
+  console.log('idForRename in Home', idForRename);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -63,9 +65,8 @@ const HomePage = () => {
   const getShowModalWindowFromState = useSelector(getShowModalWindow);
   const getShowRenameModalWindowFromState = useSelector(getRenameShowModalWindow);
   const getActiveChannelNameForChangingFromState = useSelector(getActiveChannelNameIdForChanging);
-  console.log('getActiveChannelNameForChangingFromState',getActiveChannelNameForChangingFromState);
+  console.log('getActiveChannelNameForChangingFromState', getActiveChannelNameForChangingFromState);
   const getDeleteModalWidowFromState = useSelector(getDeleteShowModalWindow);
-
 
   console.log('Channels from state:', getChannelsFromState);
 
@@ -76,10 +77,6 @@ const HomePage = () => {
   const channelClass = (channel, getCurrentActiveChannelIdFromState) => cn('w-100', 'rounded-0', 'text-start', 'btn', {
     'btn-secondary': parseInt(getCurrentActiveChannelIdFromState, 10) === parseInt(channel.id, 10),
   });
-
-  const handleSetActiveChannel = (id) => {
-    dispatch(setActiveChannel(id));
-  };
 
   getChannelsFromState.map((channel) => console.log('channel', channel));
 
@@ -101,23 +98,23 @@ const HomePage = () => {
           </nav>
           <div className="container h-100 my-4 overflow-hidden rounded shadow">
             <div className="row h-100 bg-white flex-md-row">
-              
+
               <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
                 <Channels channelClass={channelClass} />
               </div>
               <div className="col p-0 h-100">
-                
+
                 <Messages className="flex-grow-1 overflow-auto" />
               </div>
             </div>
           </div>
           {getShowModalWindowFromState && <ChannelModalWindow />}
-          {getShowRenameModalWindowFromState && <RenameChannelModal channelName={nameForRename} channelId={idForRename}  />}
-          {getDeleteModalWidowFromState && <DeleteChannelModal channelId = {id}
-          
-          />}
+          {getShowRenameModalWindowFromState && <RenameChannelModal />}
+          {getDeleteModalWidowFromState && (
+          <DeleteChannelModal channelId={id} />
+          )}
         </div>
-        
+
       </div>
       <div className="Toastify" />
     </div>
