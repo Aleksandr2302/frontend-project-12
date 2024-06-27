@@ -7,6 +7,7 @@ import LoginPage from './components/Login';
 import NotFoundPage from './components/NotFound';
 import store from './slices/configureStore';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SignUp from './components/SignUp';
 
 const App = () => (
   <div className="App">
@@ -15,6 +16,7 @@ const App = () => (
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>

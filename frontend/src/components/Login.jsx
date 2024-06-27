@@ -9,10 +9,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  selectUser, selectIsAuthenticated, setToken, getToken, setUser,
+  selectUser, selectIsAuthenticated, setToken, getToken, setUser, setAuthorization,
 } from '../slices/authSlice';
 import routes from '../routes/routes';
 import hexletImage from '../images/hexlet-image.jpg';
+import {
+  setShowSignUpPage,
+} from '../slices/signUp';
 
 const ValidationSchema = Yup.object().shape({
   username: Yup.string()
@@ -46,6 +49,7 @@ const handleSubmit = async (values, setShowError, navigate, dispatch) => {
     if (getTokenInLocalStorage && getTokenInLocalStorage.length > 0) {
       console.log('Есть токен!');
       setShowError(false);
+      dispatch(setAuthorization());
       navigate('/');
     } else {
       console.log('НЕТ токен!');
@@ -78,7 +82,7 @@ const LoginPage = () => {
     <div className="d-flex flex-column h-100">
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
-          <a className="navbar-brand" href="/">Hexlet Chat</a>
+          <a className="navbar-brand" href="/login">Hexlet Chat</a>
         </div>
       </nav>
 
@@ -113,7 +117,7 @@ const LoginPage = () => {
                     <Form.Group className="mb-3">
                       <Form.Label>Пароль</Form.Label>
                       <Form.Control
-                        type="password" /* Изменено на password */
+                        type="password"
                         placeholder="Пароль"
                         id="password"
                         autoComplete="password"
@@ -129,14 +133,6 @@ const LoginPage = () => {
                     <Button type="submit">
                       Войти
                     </Button>
-
-                    <br />
-                    <br />
-                    <br />
-                    <Button type="submit" onClick={() => localStorage.clear()}>
-                      clean Storage
-                    </Button>
-
                   </Form>
                 </div>
               </div>

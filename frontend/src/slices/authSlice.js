@@ -16,12 +16,6 @@ const authSlice = createSlice({
       // eslint-disable-next-line no-param-reassign
       state.isAuthenticated = true;
     },
-    logoutUser(state) {
-      // eslint-disable-next-line no-param-reassign
-      state.user = null;
-      // eslint-disable-next-line no-param-reassign
-      state.isAuthenticated = false;
-    },
     setToken(state, action) {
       // eslint-disable-next-line no-param-reassign
       state.token = action.payload;
@@ -30,11 +24,16 @@ const authSlice = createSlice({
       // eslint-disable-next-line no-param-reassign
       state.user = action.payload;
     },
+    setAuthorization(state) {
+      // eslint-disable-next-line no-param-reassign
+      state.isAuthenticated = true;
+    },
+    logOutUser: () => initialState,
   },
 });
 
 export const {
-  loginUser, logoutUser, setToken, setUser,
+  loginUser, logoutUser, setToken, setUser, setAuthorization, logOutUser, addEachUserName,
 } = authSlice.actions;
 export const selectUser = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;

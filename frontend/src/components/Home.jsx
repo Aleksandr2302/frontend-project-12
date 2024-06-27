@@ -17,7 +17,7 @@ import {
   getDeleteShowModalWindow,
 } from '../slices/channelSlice';
 
-import { getToken } from '../slices/authSlice';
+import { getToken, logOutUser, selectIsAuthenticated } from '../slices/authSlice';
 
 import Channels from './Channels';
 import Messages from './Messages';
@@ -58,6 +58,11 @@ const HomePage = () => {
     getChanels(token);
   }, []);
 
+  const exitFunction = () => {
+    dispatch(logOutUser());
+    navigate('/login');
+  };
+
   // Selectors
   const getChannelsFromState = useSelector(selectChannels);
   const getActiveChannelNameFromState = useSelector(getActiveChannelName);
@@ -67,6 +72,7 @@ const HomePage = () => {
   const getActiveChannelNameForChangingFromState = useSelector(getActiveChannelNameIdForChanging);
   console.log('getActiveChannelNameForChangingFromState', getActiveChannelNameForChangingFromState);
   const getDeleteModalWidowFromState = useSelector(getDeleteShowModalWindow);
+  const getAuthorizationFromState = useSelector(selectIsAuthenticated);
 
   console.log('Channels from state:', getChannelsFromState);
 
@@ -91,9 +97,12 @@ const HomePage = () => {
               <a className="navbar-brand" href="/">
                 Hexlet Chat
               </a>
-              <button type="button" className="btn btn-primary">
+              {getAuthorizationFromState && (
+              <button type="button" className="btn btn-primary" onClick={() => exitFunction()}>
                 Выйти
               </button>
+              )}
+
             </div>
           </nav>
           <div className="container h-100 my-4 overflow-hidden rounded shadow">
