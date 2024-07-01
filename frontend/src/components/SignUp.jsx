@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   selectUser, selectIsAuthenticated, setToken, getToken, setUser, setAuthorization,
 } from '../slices/authSlice';
@@ -18,6 +19,7 @@ import {
 } from '../slices/signUp';
 
 const SignUp = () => {
+  const { t } = useTranslation();
   const [userNameError, setUserNameError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -56,15 +58,15 @@ const SignUp = () => {
 
   const ValidationSchema = Yup.object().shape({
     username: Yup.string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов'),
+      .required(t('validation.min'))
+      .min(3, t('validation.min'))
+      .max(20, t('validation.max')),
     password: Yup.string()
-      .required('Обязательное поле')
-      .min(6, 'Не менее 6 символов'),
+      .required(t('validation.reqiured'))
+      .min(6, t('validation.minPassword')),
     passwordConfirmation: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-      .required('Обязательное поле'),
+      .oneOf([Yup.ref('password'), null], t('validation.passwordSame'))
+      .required(t('validation.reqiured')),
   });
 
   const formik = useFormik({
@@ -84,7 +86,7 @@ const SignUp = () => {
     <div className="d-flex flex-column h-100">
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
-          <a className="navbar-brand" href="/login">Hexlet Chat</a>
+          <a className="navbar-brand" href="/login">{t('chat.header')}</a>
         </div>
       </nav>
 
@@ -102,12 +104,12 @@ const SignUp = () => {
                   {' '}
                   {/* Добавлен div для формы */}
                   <Form onSubmit={formik.handleSubmit}>
-                    <h1 className="text-center mb-4">Регистрация</h1>
+                    <h1 className="text-center mb-4">{t('interfaces.registration')}</h1>
                     <Form.Group className="mb-3">
                       <Form.Control
                         type="text"
                         name="username"
-                        placeholder="Имя пользователя"
+                        placeholder={t('info.username')}
                         autoComplete="username"
                         id="username"
                         onChange={formik.handleChange}
@@ -124,7 +126,7 @@ const SignUp = () => {
                     <Form.Group className="mb-3">
                       <Form.Control
                         type="password"
-                        placeholder="Пароль"
+                        placeholder={t('info.password2')}
                         name="password"
                         id="password"
                         autoComplete="password"
@@ -143,7 +145,7 @@ const SignUp = () => {
                       <Form.Control
                         type="password"
                         name="passwordConfirmation"
-                        placeholder="Подтвердите пароль"
+                        placeholder={t('info.passwordConfirmation')}
                         id="passwordConfirmation"
                         autoComplete="new-password"
                         onChange={formik.handleChange}
@@ -160,12 +162,12 @@ const SignUp = () => {
 
                     {userNameError && (
                       <div className="mb-3" style={{ color: 'red' }}>
-                        Такой пользователь уже существует
+                        {t('warnings.sameUser')}
                       </div>
                     )}
 
                     <Button type="submit">
-                      Зарегистрироваться
+                      {t('interfaces.signup')}
                     </Button>
                   </Form>
                 </div>

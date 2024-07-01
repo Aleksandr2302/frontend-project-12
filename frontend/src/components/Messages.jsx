@@ -4,6 +4,7 @@ import { Formik, Field, Form } from 'formik';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import io from 'socket.io-client';
+import { useTranslation } from 'react-i18next';
 import {
   addMessage, getMessage, getMessageCount2,
 } from '../slices/messageSlice';
@@ -14,6 +15,7 @@ import { getActiveChannelName, getActiveChannelId } from '../slices/channelSlice
 const socket = io('http://localhost:3000');
 
 const Messages = () => {
+  const { t } = useTranslation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [networkStatus, setNetworkStatus] = useState('');
   const [pendingMessages, setPendingMessages] = useState(() => {
@@ -73,7 +75,7 @@ const Messages = () => {
 
     const handleOffline = () => {
       setIsOnline(false);
-      setNetworkStatus('Проблема с сетью, сообщения не отправляются');
+      setNetworkStatus(t('warnings.networkError'));
     };
 
     window.addEventListener('online', handleOnline);
@@ -100,7 +102,7 @@ const Messages = () => {
       handleSubmit(newMessage, token);
     } else {
       setPendingMessages((prevMessages) => [...prevMessages, newMessage]);
-      setNetworkStatus('Проблема с сетью, сообщение сохранено и будет отправлено при восстановлении сети');
+      setNetworkStatus(t('warnings.networkWarning'));
     }
   };
 
@@ -119,9 +121,7 @@ const Messages = () => {
           </b>
         </p>
         <span className="text-muted">
-          {getMessageCountFromState2}
-          {' '}
-          сообщений
+          {t('messagesCounter', { count: getMessageCountFromState2 })}
         </span>
       </div>
       <div id="messages-box" ref={messagesBoxRef} className="chat-messages overflow-auto px-5 my-1">
@@ -156,7 +156,7 @@ const Messages = () => {
                 <Field
                   type="text"
                   name="message"
-                  placeholder="Введите сообщение..."
+                  placeholder={t('messages.inputPlaceholder')}
                   autoComplete="off"
                   className="form-control"
                   onChange={handleChange}
@@ -167,7 +167,7 @@ const Messages = () => {
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
                     <path fillRule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
                   </svg>
-                  <span className="visually-hidden">Отправить</span>
+                  <span className="visually-hidden">{t('messages.send')}</span>
                 </Button>
               </div>
             </Form>

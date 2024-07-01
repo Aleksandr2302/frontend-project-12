@@ -6,6 +6,7 @@ import {
 } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import {
   getToken,
 } from '../slices/authSlice';
@@ -15,6 +16,7 @@ import {
 
 const RenameChannelModal = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const token = useSelector(getToken);
   const inputRef = useRef(null);
@@ -35,9 +37,9 @@ const RenameChannelModal = () => {
 
   const ValidationSchema = Yup.object().shape({
     renameChannelName: Yup.string()
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .test('is-unique', 'Это имя канала уже занято', (value) => uniqValidationChannel(value)),
+      .min(3, t('validation.min'))
+      .max(20, t('validation.max'))
+      .test('is-unique', t('validation.uniqFailed'), (value) => uniqValidationChannel(value)),
   });
 
   const handleCloseWindow = () => {
@@ -79,7 +81,7 @@ const RenameChannelModal = () => {
   return (
     <Modal show onHide={handleCloseWindow} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('channels.renameChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -114,7 +116,7 @@ const RenameChannelModal = () => {
               </div>
               <Modal.Footer>
                 <Button variant="secondary" onClick={handleCloseWindow}>Отменить</Button>
-                <Button variant="primary" type="submit">Отправить</Button>
+                <Button variant="primary" type="submit">{t('messages.send')}</Button>
               </Modal.Footer>
             </Form>
           )}

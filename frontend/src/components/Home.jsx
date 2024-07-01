@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import cn from 'classnames';
+import { useTranslation } from 'react-i18next';
 import routes from '../routes/routes';
 import {
   selectChannels,
@@ -26,6 +27,24 @@ import RenameChannelModal from './RenameChannelModal';
 import DeleteChannelModal from './DeleteChannel';
 
 const HomePage = () => {
+  // Selectors
+  const getChannelsFromState = useSelector(selectChannels);
+  const getActiveChannelNameFromState = useSelector(getActiveChannelName);
+  const getactiveChannelFromState = useSelector(getActiveChannel);
+  const getShowModalWindowFromState = useSelector(getShowModalWindow);
+  const getShowRenameModalWindowFromState = useSelector(getRenameShowModalWindow);
+  const getActiveChannelNameForChangingFromState = useSelector(getActiveChannelNameIdForChanging);
+  console.log('getActiveChannelNameForChangingFromState', getActiveChannelNameForChangingFromState);
+  const getDeleteModalWidowFromState = useSelector(getDeleteShowModalWindow);
+  const getAuthorizationFromState = useSelector(selectIsAuthenticated);
+
+  console.log('Channels from state:', getChannelsFromState);
+
+  console.log('ChannelsName from state:', getActiveChannelNameFromState);
+
+  console.log('activeChannel', getactiveChannelFromState);
+
+  const { t } = useTranslation();
   const token = useSelector(getToken);
   console.log('token in home page', token);
 
@@ -63,22 +82,11 @@ const HomePage = () => {
     navigate('/login');
   };
 
-  // Selectors
-  const getChannelsFromState = useSelector(selectChannels);
-  const getActiveChannelNameFromState = useSelector(getActiveChannelName);
-  const getactiveChannelFromState = useSelector(getActiveChannel);
-  const getShowModalWindowFromState = useSelector(getShowModalWindow);
-  const getShowRenameModalWindowFromState = useSelector(getRenameShowModalWindow);
-  const getActiveChannelNameForChangingFromState = useSelector(getActiveChannelNameIdForChanging);
-  console.log('getActiveChannelNameForChangingFromState', getActiveChannelNameForChangingFromState);
-  const getDeleteModalWidowFromState = useSelector(getDeleteShowModalWindow);
-  const getAuthorizationFromState = useSelector(selectIsAuthenticated);
-
-  console.log('Channels from state:', getChannelsFromState);
-
-  console.log('ChannelsName from state:', getActiveChannelNameFromState);
-
-  console.log('activeChannel', getactiveChannelFromState);
+  useEffect(() => {
+    if (!getAuthorizationFromState) {
+      navigate('/login');
+    }
+  });
 
   const channelClass = (channel, getCurrentActiveChannelIdFromState) => cn('w-100', 'rounded-0', 'text-start', 'btn', {
     'btn-secondary': parseInt(getCurrentActiveChannelIdFromState, 10) === parseInt(channel.id, 10),
@@ -101,11 +109,11 @@ const HomePage = () => {
           <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
             <div className="container">
               <a className="navbar-brand" href="/" onClick={handleLinkClick}>
-                Hexlet Chat
+                {t('chat.header')}
               </a>
               {getAuthorizationFromState && (
               <button type="button" className="btn btn-primary" onClick={() => exitFunction()}>
-                Выйти
+                {t('interfaces.logOut')}
               </button>
               )}
 

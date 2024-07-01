@@ -6,6 +6,7 @@ import {
 } from 'formik';
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { getToken } from '../slices/authSlice';
 import {
   setActiveChannel,
@@ -14,6 +15,7 @@ import {
 } from '../slices/channelSlice';
 
 const ChannelModalWindow = () => {
+  const { t } = useTranslation();
   const channels = useSelector((state) => state.channels.channels);
 
   const uniqValidationChannel = (name) => {
@@ -24,9 +26,9 @@ const ChannelModalWindow = () => {
 
   const ValidationSchema = Yup.object().shape({
     channelName: Yup.string()
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .test('is-unique', 'Должно быть уникальным', (value) => uniqValidationChannel(value)),
+      .min(3, t('validation.min'))
+      .max(20, t('validation.min'))
+      .test('is-unique', t('validation.uniq'), (value) => uniqValidationChannel(value)),
   });
 
   const dispatch = useDispatch();
@@ -73,7 +75,7 @@ const ChannelModalWindow = () => {
   return (
     <Modal show onHide={handleCloseWindow} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('channels.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Formik
@@ -102,8 +104,8 @@ const ChannelModalWindow = () => {
                 <ErrorMessage name="channelName" component="div" className="text-danger" />
               </div>
               <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseWindow}>Отменить</Button>
-                <Button variant="primary" type="submit">Отправить</Button>
+                <Button variant="secondary" onClick={handleCloseWindow}>{t('interfaces.cancel')}</Button>
+                <Button variant="primary" type="submit">{t('messages.send')}</Button>
               </Modal.Footer>
             </Form>
           )}

@@ -8,6 +8,7 @@ import NotFoundPage from './components/NotFound';
 import store from './slices/configureStore';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SignUp from './components/SignUp';
+import './i18n';
 
 const App = () => (
   <div className="App">

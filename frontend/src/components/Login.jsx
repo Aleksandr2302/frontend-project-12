@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import {
   selectUser, selectIsAuthenticated, setToken, getToken, setUser, setAuthorization,
 } from '../slices/authSlice';
@@ -17,12 +18,6 @@ import {
   setShowSignUpPage,
 } from '../slices/signUp';
 
-const ValidationSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Обязательное поле'),
-  password: Yup.string()
-    .required('Обязательное поле'),
-});
 // console.log('localStorage',localStorage);
 
 const handleSubmit = async (values, setShowError, navigate, dispatch) => {
@@ -63,12 +58,20 @@ const handleSubmit = async (values, setShowError, navigate, dispatch) => {
 };
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const token = useSelector(getToken);
   console.log('tokenRedux', token);
+
+  const ValidationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required('Заполните это поле'),
+    password: Yup.string()
+      .required('Заполните это поле'),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -82,7 +85,7 @@ const LoginPage = () => {
     <div className="d-flex flex-column h-100">
       <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
         <div className="container">
-          <a className="navbar-brand" href="/login">Hexlet Chat</a>
+          <a className="navbar-brand" href="/login">{t('chat.header')}</a>
         </div>
       </nav>
 
@@ -100,12 +103,11 @@ const LoginPage = () => {
                   {' '}
                   {/* Добавлен div для формы */}
                   <Form onSubmit={formik.handleSubmit}>
-                    <h1 className="text-center mb-4">Войти</h1>
+                    <h1 className="text-center mb-4">{t('interfaces.signin')}</h1>
                     <Form.Group className="mb-3">
-                      <Form.Label>Ваш Ник</Form.Label>
                       <Form.Control
                         type="text"
-                        placeholder="Ваш ник"
+                        placeholder={t('info.nickname')}
                         autoComplete="username"
                         id="username"
                         onChange={formik.handleChange}
@@ -115,10 +117,9 @@ const LoginPage = () => {
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                      <Form.Label>Пароль</Form.Label>
                       <Form.Control
                         type="password"
-                        placeholder="Пароль"
+                        placeholder={t('info.password')}
                         id="password"
                         autoComplete="password"
                         onChange={formik.handleChange}
@@ -126,20 +127,25 @@ const LoginPage = () => {
                         value={formik.values.password}
                       />
                       {showError && (
-                      <div className="invalid-feedback" style={{ display: 'block', color: 'red' }}>Неверные имя пользователя или пароль</div>
+                      <div className="invalid-feedback" style={{ display: 'block', color: 'red' }}>
+                        {t('validation.wrongLoginPassword')}
+                      </div>
                       )}
                     </Form.Group>
 
                     <Button type="submit">
-                      Войти
+                      {t('interfaces.signin')}
                     </Button>
                   </Form>
                 </div>
               </div>
               <div className="card-footer p-4">
                 <div className="text-center">
-                  <span>Нет аккаунта? </span>
-                  <a href="/signup">Регистрация</a>
+                  <span>
+                    {t('interfaces.registration')}
+                    {' '}
+                  </span>
+                  <a href="/signup">{t('interfaces.registration')}</a>
                 </div>
               </div>
             </div>

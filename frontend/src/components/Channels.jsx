@@ -5,6 +5,7 @@ import cn from 'classnames';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import {
   selectChannels,
   setActiveChannel,
@@ -18,6 +19,7 @@ import {
 import '../App.css';
 
 const Channels = (props) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   // Selectors
@@ -75,7 +77,7 @@ const Channels = (props) => {
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
           </svg>
-          <span className="visually-hidden">+</span>
+          <span className="visually-hidden">{t('channels.addButton')}</span>
         </button>
       </div>
 
@@ -101,10 +103,10 @@ const Channels = (props) => {
                   title=""
                 >
                   <Dropdown.Item eventKey="1" onClick={() => handleRename(channel.name, channel.id)}>
-                    Переименовать
+                    {t('channels.rename')}
                   </Dropdown.Item>
                   <Dropdown.Item eventKey="2" onClick={() => handleDelete(channel.name, channel.id)}>
-                    Удалить
+                    {t('channels.delete')}
                   </Dropdown.Item>
                 </DropdownButton>
                 )}
@@ -112,7 +114,7 @@ const Channels = (props) => {
             ))
           ) : (
             <div>
-              <p>Каналы отсутствуют или загружаются...</p>
+              <p>{t('warnings.channelLoading')}</p>
             </div>
           )}
         </ul>

@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import {
   setActiveChannel,
   setDeleteShowWindow,
@@ -11,6 +12,7 @@ import { getToken } from '../slices/authSlice';
 import { removeMessage } from '../slices/messageSlice';
 
 const DeleteChannelModal = (channelId) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   // const {nameForRename, idForRename} = useSelector(getActiveChannelNameIdForChanging);
   const token = useSelector(getToken);
@@ -49,13 +51,13 @@ const DeleteChannelModal = (channelId) => {
   return (
     <Modal show onHide={handleCloseWindow} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('channels.deleteChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>Уверены?</p>
+        <p>{t('info.areYouSure')}</p>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseWindow}>Отменить</Button>
-          <Button variant="danger" type="submit" onClick={() => deleteChannelFunction(channelId, token)}>Удалить</Button>
+          <Button variant="danger" type="submit" onClick={() => deleteChannelFunction(channelId, token)}>{t('channels.delete')}</Button>
         </Modal.Footer>
       </Modal.Body>
     </Modal>
