@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import io from 'socket.io-client';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import {
   addMessage, getMessage, getMessageCount2,
 } from '../slices/messageSlice';
@@ -15,6 +16,7 @@ import { getActiveChannelName, getActiveChannelId } from '../slices/channelSlice
 const socket = io('http://localhost:3000');
 
 const Messages = () => {
+  filter.loadDictionary('ru');
   const { t } = useTranslation();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [networkStatus, setNetworkStatus] = useState('');
@@ -39,9 +41,15 @@ const Messages = () => {
   const newMessageFunc = (value, channelId, username) => ({ body: value, channelId, username });
 
   const handleSubmit = async (newMessage, token) => {
-    console.log('Send', newMessage);
+    const cleanedBody = filter.clean(newMessage.body);
+    const useCleanMessage = {
+      ...newMessage,
+      body: cleanedBody,
+    };
+
+    console.log('useCleanMessage', useCleanMessage);
     try {
-      const response = await axios.post('/api/v1/messages', newMessage, {
+      const response = await axios.post('/api/v1/messages', useCleanMessage, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

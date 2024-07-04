@@ -7,6 +7,7 @@ import {
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import { getToken } from '../slices/authSlice';
 import 'react-toastify/dist/ReactToastify.css';
 import {
@@ -17,6 +18,7 @@ import {
 } from '../slices/channelSlice';
 
 const ChannelModalWindow = () => {
+  filter.loadDictionary('ru');
   const { t } = useTranslation();
   const channels = useSelector((state) => state.channels.channels);
 
@@ -52,7 +54,10 @@ const ChannelModalWindow = () => {
   }, []);
 
   const addChannelFunction = async (name, tkn) => {
-    const newChannel = { name };
+    console.log('addChannelFunction');
+    const cleanedChannelName = filter.clean(name);
+    console.log('Cleaned Channel Name:', cleanedChannelName); // Log cleaned channel name
+    const newChannel = { name: cleanedChannelName };
 
     try {
       const response = await axios.post('/api/v1/channels', newChannel, {
@@ -86,6 +91,7 @@ const ChannelModalWindow = () => {
           initialValues={{ channelName: '' }}
           validationSchema={ValidationSchema}
           onSubmit={(values, { resetForm }) => {
+            console.log('values.channelName', values.channelName);
             addChannelFunction(values.channelName, token);
             resetForm();
           }}

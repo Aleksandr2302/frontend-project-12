@@ -7,6 +7,7 @@ import {
 import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import {
   getToken,
 } from '../slices/authSlice';
@@ -18,6 +19,7 @@ import {
 } from '../slices/channelSlice';
 
 const RenameChannelModal = () => {
+  filter.loadDictionary('ru');
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -51,7 +53,10 @@ const RenameChannelModal = () => {
 
   const renameChannelFunction = async (newName, userToken, id) => {
     console.log('newName, token, id', newName, userToken, id);
-    const editedChannel = { name: newName };
+
+    const cleanNameChannel = filter.clean(newName);
+    const editedChannel = { name: cleanNameChannel };
+    console.log('editedChannel', editedChannel);
 
     try {
       const response = await axios.patch(`/api/v1/channels/${id}`, editedChannel, {
