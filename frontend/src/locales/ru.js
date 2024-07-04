@@ -11,6 +11,7 @@ const ruTranslation = {
       addButton: '+',
       management: 'Управление каналом',
       addChannel: 'Добавить канал',
+      latice: ' #',
     },
     messages: {
       send: 'Отправить',

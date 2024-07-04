@@ -11,7 +11,10 @@ import {
   getToken,
 } from '../slices/authSlice';
 import {
-  renameChannel, setRenameShowWindow, getActiveChannelNameIdForChanging,
+  renameChannel,
+  setRenameShowWindow,
+  getActiveChannelNameIdForChanging,
+  setShowNoticeForRenameChannel,
 } from '../slices/channelSlice';
 
 const RenameChannelModal = () => {
@@ -61,6 +64,7 @@ const RenameChannelModal = () => {
         console.log('response.data', response.data);
         dispatch(renameChannel({ id: response.data.id, newName: response.data.name }));
         handleCloseWindow(); // Закрытие модального окна после успешного добавления
+        dispatch(setShowNoticeForRenameChannel());
       }
 
       console.log('response.data', response.data);

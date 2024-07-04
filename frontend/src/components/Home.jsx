@@ -6,7 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import cn from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { ToastContainer, toast } from 'react-toastify';
 import routes from '../routes/routes';
+import 'react-toastify/dist/ReactToastify.css';
+
 import {
   selectChannels,
   setChannels,
@@ -16,6 +19,12 @@ import {
   getRenameShowModalWindow,
   getActiveChannelNameIdForChanging,
   getDeleteShowModalWindow,
+  setShowNoticeForCreateChannel,
+  getShowNoticeForCreateChannel,
+  setShowNoticeForRenameChannel,
+  getShowNoticeForRenameChannel,
+  setShowNoticeForDeleteChannel,
+  getShowNoticeForDeleteChannel,
 } from '../slices/channelSlice';
 
 import { getToken, logOutUser, selectIsAuthenticated } from '../slices/authSlice';
@@ -37,6 +46,9 @@ const HomePage = () => {
   console.log('getActiveChannelNameForChangingFromState', getActiveChannelNameForChangingFromState);
   const getDeleteModalWidowFromState = useSelector(getDeleteShowModalWindow);
   const getAuthorizationFromState = useSelector(selectIsAuthenticated);
+  const getShowNoticeForCreateChannelFromState = useSelector(getShowNoticeForCreateChannel);
+  const getShowNoticeForRenameChannelFromState = useSelector(getShowNoticeForRenameChannel);
+  const getShowNoticeForDeleteChannelFromState = useSelector(getShowNoticeForDeleteChannel);
 
   console.log('Channels from state:', getChannelsFromState);
 
@@ -87,6 +99,63 @@ const HomePage = () => {
       navigate('/login');
     }
   });
+
+  const notifyCreateChannel = () => {
+    toast.success(t('warnings.channelCreated'), {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const notifyRenameChannel = () => {
+    toast.success(t('warnings.channelRenamed'), {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const notifyDeleteChannel = () => {
+    toast.success(t('warnings.channelDeleted'), {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  useEffect(() => {
+    if (getShowNoticeForCreateChannelFromState) {
+      notifyCreateChannel();
+      dispatch(setShowNoticeForCreateChannel());
+    }
+  }, [getShowNoticeForCreateChannelFromState]);
+
+  useEffect(() => {
+    if (getShowNoticeForRenameChannelFromState) {
+      notifyRenameChannel();
+      dispatch(setShowNoticeForRenameChannel());
+    }
+  }, [getShowNoticeForRenameChannelFromState]);
+
+  useEffect(() => {
+    if (getShowNoticeForDeleteChannelFromState) {
+      notifyDeleteChannel();
+      dispatch(setShowNoticeForDeleteChannel());
+    }
+  }, [getShowNoticeForDeleteChannelFromState]);
 
   const channelClass = (channel, getCurrentActiveChannelIdFromState) => cn('w-100', 'rounded-0', 'text-start', 'btn', {
     'btn-secondary': parseInt(getCurrentActiveChannelIdFromState, 10) === parseInt(channel.id, 10),
@@ -139,7 +208,9 @@ const HomePage = () => {
         </div>
 
       </div>
-      <div className="Toastify" />
+      <div className="Toastify">
+        <ToastContainer />
+      </div>
     </div>
   );
 };

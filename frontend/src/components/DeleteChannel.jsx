@@ -7,6 +7,7 @@ import {
   setActiveChannel,
   setDeleteShowWindow,
   deleteChannel,
+  setShowNoticeForDeleteChannel,
 } from '../slices/channelSlice';
 import { getToken } from '../slices/authSlice';
 import { removeMessage } from '../slices/messageSlice';
@@ -40,6 +41,7 @@ const DeleteChannelModal = (channelId) => {
         console.log('Dispatching removeMessage with id:', channelIdValue);
         dispatch(removeMessage(channelIdValue));
         console.log('Calling handleCloseWindow');
+        dispatch(setShowNoticeForDeleteChannel());
         handleCloseWindow();
         dispatch(setActiveChannel(1));
       }

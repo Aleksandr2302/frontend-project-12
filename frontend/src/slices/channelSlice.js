@@ -9,10 +9,15 @@ const initialState = {
   showModalWindow: false,
   showRenameChannelModalWindow: false,
   showDeleteChannelModalWindow: false,
+  showNoticeForCreateChannel: false,
+  showNoticeForRenameChannel: false,
+  showNoticeForDeleteChannel: false,
+
   activeChannelNameForChanging: {
     name: '',
     id: null,
   },
+
 };
 
 const channelSlice = createSlice({
@@ -57,6 +62,15 @@ const channelSlice = createSlice({
       const id = action.payload;
       state.channels = state.channels.filter((channel) => channel.id !== id);
     },
+    setShowNoticeForCreateChannel(state) {
+      state.showNoticeForCreateChannel = !state.showNoticeForCreateChannel;
+    },
+    setShowNoticeForRenameChannel(state) {
+      state.showNoticeForRenameChannel = !state.showNoticeForRenameChannel;
+    },
+    setShowNoticeForDeleteChannel(state) {
+      state.showNoticeForDeleteChannel = !state.showNoticeForDeleteChannel;
+    },
   },
 });
 
@@ -70,6 +84,9 @@ export const {
   renameChannel,
   deleteChannel,
   setDeleteShowWindow,
+  setShowNoticeForCreateChannel,
+  setShowNoticeForRenameChannel,
+  setShowNoticeForDeleteChannel,
 } = channelSlice.actions;
 export const selectChannels = (state) => state.channels.channels;
 export const getActiveChannel = (state) => state.channels.activeChannel.id;
@@ -78,6 +95,9 @@ export const getRenameShowModalWindow = (state) => state.channels.showRenameChan
 // eslint-disable-next-line max-len
 export const getActiveChannelNameIdForChanging = (state) => state.channels.activeChannelNameForChanging;
 export const getDeleteShowModalWindow = (state) => state.channels.showDeleteChannelModalWindow;
+export const getShowNoticeForCreateChannel = (state) => state.channels.showNoticeForCreateChannel;
+export const getShowNoticeForRenameChannel = (state) => state.channels.showNoticeForRenameChannel;
+export const getShowNoticeForDeleteChannel = (state) => state.channels.showNoticeForDeleteChannel;
 
 export const getActiveChannelName = (state) => {
   const activeChannelId = parseInt(state.channels.activeChannel.id, 10);

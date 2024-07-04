@@ -8,10 +8,12 @@ import { Modal, Button } from 'react-bootstrap';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { getToken } from '../slices/authSlice';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   setActiveChannel,
   setShowModalWindow,
   addChannel,
+  setShowNoticeForCreateChannel,
 } from '../slices/channelSlice';
 
 const ChannelModalWindow = () => {
@@ -64,6 +66,8 @@ const ChannelModalWindow = () => {
         dispatch(addChannel(response.data)); // Вызов диспетчера для добавления канала в Redux
         dispatch(setActiveChannel(response.data.id));
         handleCloseWindow(); // Закрытие модального окна после успешного добавления
+        // notice
+        dispatch(setShowNoticeForCreateChannel());
       }
 
       console.log('response.data', response.data);
