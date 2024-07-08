@@ -29,10 +29,14 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npx start-server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "engines": {
+    "npm": "9.6.7",
+    "node": "18.x"
   },
   "browserslist": {
     "production": [
