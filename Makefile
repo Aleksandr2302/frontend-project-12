@@ -1,7 +1,7 @@
 start-frontend:
 	npm -C frontend start
 start-backend:
-	npx start-server
+	npm start
 develop:
 	make start-backend & make start-frontend
 lint:
