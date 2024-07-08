@@ -1,5 +1,3 @@
-build:
-	npm run build
 start-frontend:
 	npm -C frontend start
 start-backend:
