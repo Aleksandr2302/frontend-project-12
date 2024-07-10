@@ -6,7 +6,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/3964b386d3c19d0333ee/maintainability)](https://codeclimate.com/github/Aleksandr2302/frontend-project-12/maintainability)
 
 
-## О проекте
+## О проекте!
 Данный проект представляет собой real-time приложение на React/Redux, в котором используются такие технологии как AJAX, REST, websockets, React (с хуками) + Redux (@reduxjs/toolkit) + Formik
 
 ### Render
