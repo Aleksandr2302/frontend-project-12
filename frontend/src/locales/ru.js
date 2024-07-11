@@ -65,7 +65,7 @@ const ruTranslation = {
       toMainPage: 'на главную страницу',
       newMessage: 'Новое сообщение',
       nickname: 'Ваш ник',
-      password: 'Ваш пароль',
+      password: 'Пароль',
       noAccount: 'Нет аккаунта?',
       newMessageError: 'Ошибка при отправке сообщения',
       newChannelError: 'Ошибка при создании канала',
