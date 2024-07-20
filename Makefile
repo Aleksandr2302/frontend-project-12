@@ -14,3 +14,5 @@ build:
 	npm run build
 start:
 	make start-backend
+test:
+	npx playwright test --config=playwright.config.js
