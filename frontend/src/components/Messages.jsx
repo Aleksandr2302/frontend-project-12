@@ -13,7 +13,7 @@ import { selectUser, getToken } from '../slices/authSlice';
 import { getActiveChannelName, getActiveChannelId } from '../slices/channelSlice';
 // import '../App.css';
 
-const socket = io('http://localhost:3000');
+const socket = io();
 
 const Messages = () => {
   filter.loadDictionary('ru');
